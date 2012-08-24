@@ -79,4 +79,4 @@ Application[folder] - This folder consists of
 
 
 
-<img style="max-width:100%;" src="https://github.com/lavanya-nyros/zend_active_record/raw/master/screenshot.bmp" alt="zend_active_record" title="zend_active_record">
+<img style="max-width:100%;" src="https://github.com/lavanya-nyros/Zend-Active-Record/raw/master/screenshot.bmp" alt="zend_active_record" title="zend_active_record">
