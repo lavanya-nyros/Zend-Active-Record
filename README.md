@@ -75,3 +75,8 @@ Application[folder] - This folder consists of
 3. Views : View is the use interface where all the HTML code will be written.
 
 4. Config : This consists of database configuration.
+
+
+
+
+<img style="max-width:100%;" src="https://github.com/lavanya-nyros/zend_active_record/raw/master/screenshot.bmp" alt="zend_active_record" title="zend_active_record">
