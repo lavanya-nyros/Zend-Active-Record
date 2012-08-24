@@ -1,0 +1,322 @@
+<?php
+$users = new Application_Model_Login();
+
+$columns = $users->columns('users');
+$result = $users->fetchAll(users);
+$count = 1;
+$count1 = 1;
+$count2 = 1;
+if(isset($_POST['find']) && $_POST['find'] == "find"){
+		
+	unset($_POST['find']);
+	
+	$result = $users->find('users',$_POST['id']);
+	
+	if(count($result) == 0){ 
+		
+		$count1 = 0;
+	}
+}
+
+
+else if(isset($_POST['find_column']) && $_POST['find_column'] == "find"){
+		
+	unset($_POST['find_column']);
+	
+	$result = $users->findby_column('users',$_POST['column'],$_POST['value']);
+	
+	if(count($result) == 0){ 
+		
+		$count2 = 0;
+	}
+}
+
+else if(isset($_POST['first']) && $_POST['first'] == "first record"){
+	
+	$result = $users->first('users');
+}
+
+else if(isset($_POST['search']) && $_POST['search'] == "Search"){
+	
+	unset($_POST['search']);
+	$result = $users->search('users',$_POST['search_box'],$columns);
+	
+	
+	if(count($result) == 0){ 
+	
+		$count = 0;
+	
+	
+	}
+	
+}
+
+
+else if(isset($_POST['last']) && $_POST['last'] == "last record"){
+	
+	$result = $users->last('users');
+}
+
+else if(isset($_POST['last']) && $_POST['last'] == "last record"){
+	
+	$result = $users->last('users');
+}
+
+else if($this->result){
+	
+	$result = $this->result;
+	
+	$result = json_decode($result, true);
+	
+}
+
+
+else{
+		
+	$result = $users->fetchAll(users);		//fetchAll() method for retreiving all the records from users table
+
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link rel="stylesheet" href="<?php echo $this->baseURL();?>/css/bootstrap.css">
+<link rel="stylesheet" href="<?php echo $this->baseURL();?>/css/welcome.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>	
+<script src="<?php echo $this->baseURL();?>/js/welcome.js"></script>
+	
+</head>
+<body>
+<div id="main">
+<div class="navbar-inner" style="margin-bottom:20px;">
+<h2 style="color:white">Zend Active Record</h2>
+</div>
+
+<a href="<?= $this->url(array(
+                                 'controller' => 'Index',
+                                 'action' 	  => 'index'
+								 
+                                 )); ?>">Add new record</a>
+								 
+								
+								 
+<form action="#" method="post" id="search_form" >
+	
+	<input type="text" name="search_box" id="search_box" class="text_box1" />
+	<input type="submit" value="Search" name="search" class="btn btn-primary find1" />
+
+</form>
+
+
+	<div class="btn-toolbar">
+
+<div>
+<form action="#" method="post" >
+
+	<input type="submit" value="show all" name="all" class="btn btn-info" />
+
+</form>
+</div>
+<div>
+
+<form action="#" method="post">
+
+	<input type="submit" value="first record" name="first" class="btn btn-primary" />
+
+<form>
+</div>
+<div>
+<form action="#" method="post">
+
+	<input type="submit" value="last record" name="last" class="btn btn-primary" />
+
+<form>
+</div>
+
+
+  <div class="btn-group">
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Find by <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#" id="userid">user ID</a></li>
+            <li><a href="#" id="bycolumn">column values</a></li>
+          </ul>
+  </div>
+   
+  	<div>
+		<div id="id_form"  style="display:none;clear:both;">
+		<form action="#" method="post">
+		
+			<label>find by ID </label>
+			<input type="text" name="id" id="id" class="input-small" class="text_box2" />
+			<input type="submit" value="find" name="find" class="btn btn-info slideup find2" />
+		
+		</form>
+		</div>
+
+		<div id="column_form"  style="display:none;clear:both;">
+		
+		<form action="#" method="post" >
+		
+			<label>Column name </label>
+			<select name="column" id="column">
+				<option value="select one">-select one-</option>
+				
+				<?php for($i=0;$i<(count($columns));$i++){  
+		
+					if( $columns[$i]["Field"] == "password") 
+					 {
+						
+					 }
+					 else {	?>
+		 
+					<option value="<?php echo $columns[$i]['Field']; ?>"><?php echo $columns[$i]["Field"]; ?></option>
+					<?php		
+					}
+					 } ?>
+		
+			</select>
+			<label>Column value </label>
+			<input type="text" name="value" id="value" class="text_box3" />
+			<input type="submit" value="find" name="find_column" class="btn btn-info slideup find3" />
+		
+		
+		</form>
+		</div>
+	</div>
+</div>
+
+<table class="table table-bordered table-striped" width="100%" style="text-align:left;">
+<thead>
+<tr>
+<?php for($i=0;$i<(count($columns));$i++){  
+
+	if( $columns[$i]["Field"] == "password") 
+	 {
+	 	
+	 }
+	 else {	?>
+
+		<th><a href="<?= $this->url(array(
+                                 'controller' => 'Login',
+                                 'action' 	  => 'sort',
+								 'value'	  => $columns[$i]["Field"]
+								 
+                                 )); ?>" class="" ><?php echo $columns[$i]["Field"]; ?><i class='caret'></i></a></th>
+<?php		
+}
+ } ?>
+<th>Action</th>
+</tr>
+</thead>
+
+<?php
+
+
+/* ============================= Displaying the records ============================= */
+
+
+	for($i=0;$i<count($result);$i++){ 
+		 echo "<tr id=".$result[$i]['id']."><td>".$result[$i]['id']."</td>
+			  <td>".$result[$i]['firstname']."</td>
+			  <td>".$result[$i]['lastname']."</td>
+			  <td>".$result[$i]['username']."</td>
+			  <td>".$result[$i]['email']."</td>";
+			  
+			  ?>
+			  <td> <a href="<?= $this->url(array(
+                                 'controller' => 'Login',
+                                 'action' 	  => 'del',
+                                 'id' 		  => $result[$i]['id'])); ?>" class="delete">Delete</a> / 
+								 
+				   <a href="<?= $this->url(array(
+                                 'controller' => 'Login',
+                                 'action' 	  => 'edit',
+                                 'id' 		  => $result[$i]['id'])); ?>" > Edit</a>	  
+				 
+								
+			  </td>
+		  </tr>
+		
+	  
+ <?php }  ?>
+	                                                                              
+</table>
+
+<?php
+		if($count == 0){  ?>
+		
+			
+		<div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <b>No results for search</b>
+        </div>
+<?php } 
+
+		if($count1 == 0){  ?>
+		
+		<div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <b>No records with the id specified</b>
+        </div>
+		
+	<?php }      
+	
+		if($count2 == 0){  ?>
+		
+		<div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <b>No records with the column specified</b>
+        </div>
+		
+	<?php }
+
+?>
+<a href="#" style="text-decoration:underline" id="methods_link">Methods in Zend Active Record</a>
+<a href="" style="float:right;text-decoration:underline;display:none;" id="hide">Hide</a>
+<table class="table table-bordered table-striped" id="method_table" width="100%" style="text-align:left;display:none;">
+	<caption style="font-weight:bold;text-align:left">Methods in Zend Active Record</caption>
+	<thead>
+		<tr>
+			<th>Method</th><th>Description</th>
+		</tr>
+	</thead>
+	<tbody>	
+			<tr><td>fetchAll($table)</td><td>fetches all records from a table</td></tr>
+			<tr><td>find($table,$id)</td><td>fetches the record based on id</td></tr>
+			<tr><td>findby_column($table,$column,$value)</td><td>fetches the records based on the given column value</td></tr>
+			<tr><td>first($table)</td><td>fetches the first record from the table</td></tr>
+			<tr><td>last($table)</td><td>fetches the last record from the table</td></tr>
+			<tr><td>sorts($table,$val,$order)</td><td>Sorts the records order by the given column</td></tr>
+			<tr><td>search($table,$search_val,$columns)</td><td>Searches the related records that matches with the value in the search box</td></tr>
+			<tr><td>delete($table,$id)</td><td>deletes the records with respective id from table</td></tr>
+			<tr><td>update($condition,$colums,$table)</td><td> updates the records with the specified id in table</td></tr>
+			<tr><td>insert($table,$params=array())</td><td>inserts the records into the table</td></tr>
+	</tbody>
+</table>
+	
+	
+
+</div>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-transition.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-alert.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-modal.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-dropdown.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-scrollspy.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-tab.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-tooltip.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-popover.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-button.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-collapse.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-carousel.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/bootstrap-typeahead.js"></script>
+    <script src="<?php echo $this->baseURL();?>/js/application.js"></script>
+	
+<?php $session->result = " "; 
+
+
+ ?>
+
+</body>
+
+</html>
+   

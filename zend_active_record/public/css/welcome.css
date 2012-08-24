@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+
+input[type=text]{
+		height:20px;
+	}
+	input[type=submit]{
+		margin-top:-10px;
+	}
+	i{
+		float:right;
+		margin-top:5px;
+	}
+	#search_form{
+		float:right;
+	}
+	.btn-toolbar div{
+	 float: left !important;
+	 margin:10px;
+	 }
+	 .btn-group{
+	 	margin-top:-2px !important;
+	}
+	
+	#main{
+		width: 980px;
+		margin:0 auto;
+	}
+
